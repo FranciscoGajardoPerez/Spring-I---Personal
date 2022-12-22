@@ -1,6 +1,7 @@
 package com.example.be_java_hisp_w19_g2.repositories;
 
 import com.example.be_java_hisp_w19_g2.entities.Post;
+import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.handlers.FailedPostCreation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,7 +18,9 @@ public class PostRepository {
   UserRepository userRepository;
 
   Integer countId = 1;
+  Integer countDiscountId = 1;
   public List<Post> posts = new ArrayList<>();
+  public List<PostWithDiscount> postWithDiscounts = new ArrayList<>();
 
   public List<Post> postsLists() {
     posts.add(new Post(1,  10,  LocalDate.now().minusDays(-12),   456, 60.20));
@@ -40,6 +43,12 @@ public class PostRepository {
     post.setPostId(countId);
     posts.add(post);
     countId++;
+    return post;
+  }
+  public PostWithDiscount addPostDiscount(PostWithDiscount post) {
+    post.setPostId(countDiscountId);
+    postWithDiscounts.add(post);
+    countDiscountId++;
     return post;
   }
 }

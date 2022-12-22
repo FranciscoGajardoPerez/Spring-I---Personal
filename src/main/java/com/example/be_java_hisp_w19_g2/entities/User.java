@@ -1,5 +1,6 @@
 package com.example.be_java_hisp_w19_g2.entities;
 
+import com.example.be_java_hisp_w19_g2.dtos.PostWithDiscountDTO;
 import com.example.be_java_hisp_w19_g2.roles.Roles;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class User {
     private List<User> followed = new ArrayList<>();
     private List<User> followers = new ArrayList<>();
     private List<Post> posts = new ArrayList<>();
+    private List<PostWithDiscount> postWithDiscounts = new ArrayList<>();
     private Roles userRol;
 
     public User(Integer userId, String userName, Roles userRol) {
@@ -52,4 +54,5 @@ public class User {
     public void addPost(Post newPost) {
         posts.add(newPost);
     }
+    public void addPostDiscount(PostWithDiscount postWithDiscountDTO){postWithDiscounts.add(postWithDiscountDTO);}
 }

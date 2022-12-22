@@ -8,18 +8,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class PostDTO {
+public class PostWithDiscountDTO {
     Integer userId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate date = LocalDate.now();
 
-    ProductDTO product;
+    ProductWithDiscountDTO product;
     Integer category;
     Double price;
+
+    public PostWithDiscountDTO(String productName, String type, String brand, String color, String notes, Boolean his_promo, Double price) {
+    }
 }

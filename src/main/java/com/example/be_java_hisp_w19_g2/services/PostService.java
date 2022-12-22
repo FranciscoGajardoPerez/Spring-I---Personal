@@ -2,7 +2,10 @@ package com.example.be_java_hisp_w19_g2.services;
 
 import com.example.be_java_hisp_w19_g2.dtos.FollowedPostsDTO;
 import com.example.be_java_hisp_w19_g2.dtos.PostDTO;
+import com.example.be_java_hisp_w19_g2.dtos.PostSellerCountDTO;
+import com.example.be_java_hisp_w19_g2.dtos.PostWithDiscountDTO;
 import com.example.be_java_hisp_w19_g2.entities.Post;
+import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.entities.User;
 import com.example.be_java_hisp_w19_g2.handlers.FailedPostCreation;
 import com.example.be_java_hisp_w19_g2.repositories.PostRepository;
@@ -42,10 +45,24 @@ public class PostService implements IPostService{
     }
   }
 
-  @Override
+    @Override
+    public PostWithDiscountDTO addPostDiscountDTO(PostWithDiscountDTO postWithDiscountDTO) {
+        User user = userRepository.getUserById(postWithDiscountDTO.getUserId());
+        if(user.getUserRol() == Roles.SELLER) {
+            PostWithDiscount postReturned = postRepository.addPostDiscount(mapper.map(postWithDiscountDTO, PostWithDiscount.class));
+            postReturned.setUserId(user.getUserId());
+            user.addPostDiscount(postReturned);
+            return postWithDiscountDTO;
+        } else {
+            throw new FailedPostCreation("The user is not allowed to post a product");
+        }
+    }
+
+    @Override
   public FollowedPostsDTO getFollowedPost(Integer userId){
       User user = userRepository.getUserById(userId);
       List<PostDTO> posts = new ArrayList<>();
+      List<PostWithDiscountDTO> postWithDiscountDTOS = new ArrayList<>();
       for (User u : user.getFollowed()) {
           for (Post p : u.getPosts()) {
               LocalDate postDate = p.getDate();
@@ -56,8 +73,19 @@ public class PostService implements IPostService{
                }
           }
       }
+
+        for (User u : user.getFollowed()) {
+            for (PostWithDiscount p : u.getPostWithDiscounts()) {
+                LocalDate postDate = p.getDate();
+                Long daysSincePost = ChronoUnit.DAYS.between(postDate, LocalDate.now());
+                if (daysSincePost <= 14) {
+                    PostWithDiscountDTO postDTO = mapper.map(p, PostWithDiscountDTO.class);
+                    postWithDiscountDTOS.add(postDTO);
+                }
+            }
+        }
       Collections.sort(posts, (a, b) -> (b.getDate().compareTo(a.getDate())));
-      return new FollowedPostsDTO(userId, posts);
+      return new FollowedPostsDTO(userId, posts,postWithDiscountDTOS);
   }
 
     @Override
@@ -72,9 +100,17 @@ public class PostService implements IPostService{
        List<PostDTO> postDTOList = posts.stream()
                .map(p -> mapper.map(p, PostDTO.class))
                .collect(Collectors.toList());
+       List<PostWithDiscountDTO> postWithDiscountDTO = new ArrayList<>();
 
+        return new FollowedPostsDTO(userId, postDTOList, postWithDiscountDTO);
+    }
 
+    @Override
+    public PostSellerCountDTO getPostSeller(Integer userId) {
+        User user = userRepository.getUserById(userId);
+        Long count = user.getPostWithDiscounts().stream().count();
 
-        return new FollowedPostsDTO(userId, postDTOList);
+        return new PostSellerCountDTO(userId,user.getUserName(),count);
+
     }
 }

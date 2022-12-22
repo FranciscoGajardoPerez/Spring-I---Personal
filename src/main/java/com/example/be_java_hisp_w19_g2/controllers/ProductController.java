@@ -1,7 +1,9 @@
 package com.example.be_java_hisp_w19_g2.controllers;
 
 import com.example.be_java_hisp_w19_g2.dtos.PostDTO;
+import com.example.be_java_hisp_w19_g2.dtos.PostWithDiscountDTO;
 import com.example.be_java_hisp_w19_g2.entities.Post;
+import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.services.IProductService;
 import com.example.be_java_hisp_w19_g2.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,17 @@ public class    ProductController {
         productService.postProduct(postDTO);
         postService.addPost(postDTO);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/promo-post")
+    public ResponseEntity<?> postPromoProduct(@RequestBody PostWithDiscountDTO postDTO){
+        productService.postProductDiscount(postDTO);
+        postService.addPostDiscountDTO(postDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/promo-post/count")
+    public ResponseEntity<?> getProductsPromo(@RequestParam Integer userId){
+       return new ResponseEntity(postService.getPostSeller(userId),HttpStatus.OK);
     }
 }

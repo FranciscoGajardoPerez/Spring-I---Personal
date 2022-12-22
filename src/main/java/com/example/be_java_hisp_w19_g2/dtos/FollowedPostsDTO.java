@@ -1,5 +1,6 @@
 package com.example.be_java_hisp_w19_g2.dtos;
 
+import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.example.be_java_hisp_w19_g2.entities.Post;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,4 +20,5 @@ import java.util.List;
 public class FollowedPostsDTO {
     Integer userId;
     List<PostDTO> posts = new ArrayList<>();
+    List<PostWithDiscountDTO> postWithDiscounts = new ArrayList<>();
 }
