@@ -7,6 +7,7 @@ import com.example.be_java_hisp_w19_g2.dtos.ProductWithDiscountDTO;
 import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.entities.Product;
 import com.example.be_java_hisp_w19_g2.entities.ProductWithDiscount;
+import com.example.be_java_hisp_w19_g2.entities.User;
 import com.example.be_java_hisp_w19_g2.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

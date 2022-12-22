@@ -13,4 +13,10 @@ import lombok.NoArgsConstructor;
 public class ProductWithDiscountDTO extends ProductDTO{
     private Boolean his_promo;
     private Double discount;
+
+    public ProductWithDiscountDTO(Integer productId, String productName, String type, String brand, String color, String notes, Boolean his_promo, Double discount) {
+        super(productId, productName, type, brand, color, notes);
+        this.his_promo = his_promo;
+        this.discount = discount;
+    }
 }

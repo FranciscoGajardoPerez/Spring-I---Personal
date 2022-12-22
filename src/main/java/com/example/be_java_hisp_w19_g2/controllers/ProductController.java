@@ -6,6 +6,7 @@ import com.example.be_java_hisp_w19_g2.entities.Post;
 import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.services.IProductService;
 import com.example.be_java_hisp_w19_g2.services.PostService;
+import com.google.api.Http;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
@@ -47,5 +48,10 @@ public class    ProductController {
     @PostMapping("/promo-post/count")
     public ResponseEntity<?> getProductsPromo(@RequestParam Integer userId){
        return new ResponseEntity(postService.getPostSeller(userId),HttpStatus.OK);
+    }
+
+    @PostMapping("/promo-post/list")
+    public ResponseEntity getPostPromo(@RequestParam Integer userId){
+        return  new ResponseEntity(postService.getProductWhithDiscount(userId), HttpStatus.OK);
     }
 }

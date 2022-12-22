@@ -1,9 +1,6 @@
 package com.example.be_java_hisp_w19_g2.services;
 
-import com.example.be_java_hisp_w19_g2.dtos.FollowedPostsDTO;
-import com.example.be_java_hisp_w19_g2.dtos.PostDTO;
-import com.example.be_java_hisp_w19_g2.dtos.PostSellerCountDTO;
-import com.example.be_java_hisp_w19_g2.dtos.PostWithDiscountDTO;
+import com.example.be_java_hisp_w19_g2.dtos.*;
 import com.example.be_java_hisp_w19_g2.entities.Post;
 import com.example.be_java_hisp_w19_g2.entities.PostWithDiscount;
 import com.example.be_java_hisp_w19_g2.entities.User;
@@ -113,4 +110,40 @@ public class PostService implements IPostService{
         return new PostSellerCountDTO(userId,user.getUserName(),count);
 
     }
+
+    @Override
+    public ProductsDiscountResponseDto getProductWhithDiscount(Integer userId) {
+        User user = userRepository.getUserById(userId);
+        ProductsDiscountResponseDto productsDiscountResponseDto = new ProductsDiscountResponseDto();
+        productsDiscountResponseDto.setUserName(user.getUserName());
+        productsDiscountResponseDto.setUserId(userId);
+        List<PostWithDiscountDTO> postWithDiscountDTOS = new ArrayList<>();
+        List<PostWithDiscount> post = user.getPostWithDiscounts().stream().filter(x -> x.getProduct().getHis_promo() == true).collect(Collectors.toList());
+        for (PostWithDiscount p:
+             post) {
+
+            PostWithDiscountDTO postDto = new PostWithDiscountDTO();
+            postDto.setPrice(p.getPrice());
+            postDto.setUserId(p.getUserId());
+            postDto.setDate(p.getDate());
+            postDto.setCategory(p.getCategory());
+            postDto.setProduct(
+                    new ProductWithDiscountDTO(
+                            p.getProduct().getProductId(),
+                            p.getProduct().getProductName(),
+                            p.getProduct().getType(),
+                            p.getProduct().getBrand(),
+                            p.getProduct().getColor(),
+                            p.getProduct().getNotes(),
+                            p.getProduct().getHis_promo(),
+                            p.getProduct().getDiscount()
+                    )
+            );
+            postWithDiscountDTOS.add(postDto);
+        }
+        productsDiscountResponseDto.setPost(postWithDiscountDTOS);
+        return productsDiscountResponseDto;
+    }
+
+
 }

@@ -11,4 +11,6 @@ public interface IPostService {
   public FollowedPostsDTO getFollowedPost(Integer userId);
   public FollowedPostsDTO getFollowedPostOrderedByDate(Integer userId, String order);
   public PostSellerCountDTO getPostSeller(Integer userId);
+
+  public ProductsDiscountResponseDto getProductWhithDiscount(Integer userId);
 }
